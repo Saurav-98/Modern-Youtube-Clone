@@ -2,7 +2,17 @@ import React, { useState, useEffect } from 'react';
 
 import { Box, Stack, Typography } from '@mui/material';
 import { SideBar, Videos } from './';
+
+import { fetchFromAPI } from '../utils/fetchFromAPI';
+
 const Feed = () => {
+  // Calling the fetchFromAPI function using React.useEffect();
+
+  const [selectedCategory, setSelectedCategory] = useState('New');
+  useEffect(() => {
+    fetchFromAPI(`search?part=snippet&q=${selectedCategory}`);
+  }, [selectedCategory]);
+  // as the dependencies array is empty that means the code will always run once the page is loaded
   return (
     <Stack
       sx={{
@@ -17,7 +27,10 @@ const Feed = () => {
           px: { xs: 0, md: 2 },
         }}
       >
-        <SideBar />
+        <SideBar
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+        />
         <Typography
           className="copyright"
           variant="body2"
@@ -43,7 +56,7 @@ const Feed = () => {
             color: 'white',
           }}
         >
-          New <span style={{ color: '#F31503' }}>videos</span>
+          {selectedCategory} <span style={{ color: '#F31503' }}>videos</span>
         </Typography>
 
         <Videos videos={[]} />
